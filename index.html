@@ -544,7 +544,7 @@ body { background: #000; color: #fff; font-family: 'Oswald', sans-serif; overflo
 </style>
 </head>
 <body>
-<audio id="bgMusic" src="./audio/musica.mpeg" autoplay loop preload="auto" playsinline></audio>
+<audio id="bgMusic" src="./audio/musica.mp3" loop preload="auto" playsinline></audio>
 <!-- ══ HERO ══ -->
 <section class="hero">
   <div class="web-bg"></div>
@@ -807,13 +807,21 @@ reveals.forEach(el => observer.observe(el));
 setTimeout(() => document.getElementById('editHint')?.classList.add('hidden'), 6000);
 const music = document.getElementById('bgMusic');
 
-window.addEventListener('load', () => {
+function startMusic() {
   music.volume = 0.6;
 
-  music.play().catch(() => {
-    console.log('El navegador bloqueó el autoplay. El usuario debe tocar la pantalla.');
-  });
-});
+  music.play()
+    .then(() => {
+      console.log('Audio reproduciéndose');
+    })
+    .catch((error) => {
+      console.log('No se pudo reproducir todavía:', error);
+    });
+}
+
+window.addEventListener('load', startMusic);
+document.addEventListener('click', startMusic, { once: true });
+document.addEventListener('touchstart', startMusic, { once: true });
 </script>
 </body>
 </html>
