@@ -541,10 +541,53 @@ body { background: #000; color: #fff; font-family: 'Oswald', sans-serif; overflo
     letter-spacing: 1px;
   }
 }
+
+.start-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(ellipse at center, #1a0830 0%, #000 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+}
+
+.start-box {
+  border: 3px solid var(--gold);
+  padding: 32px 26px;
+  background: #080808;
+  box-shadow: 6px 6px 0 var(--red);
+}
+
+.start-box h1 {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(42px, 10vw, 80px);
+  color: var(--red);
+  letter-spacing: 3px;
+  text-shadow: 2px 2px 0 #fff;
+}
+
+.start-box p {
+  font-family: 'Special Elite', cursive;
+  color: #fff;
+  margin-top: 14px;
+  letter-spacing: 2px;
+}
+
 </style>
 </head>
 <body>
-<audio id="bgMusic" src="./audio/musica.mp3" loop preload="auto" playsinline></audio>
+<div id="startScreen" class="start-screen">
+  <div class="start-box">
+    <h1>🕷️ Invitación</h1>
+    <p>Toca para abrir la invitación</p>
+  </div>
+</div>
+
+<audio id="bgMusic" src="./audio/musica.mpeg" loop preload="auto" playsinline></audio>
+
 <!-- ══ HERO ══ -->
 <section class="hero">
   <div class="web-bg"></div>
@@ -805,23 +848,19 @@ const observer = new IntersectionObserver(entries => {
 reveals.forEach(el => observer.observe(el));
 
 setTimeout(() => document.getElementById('editHint')?.classList.add('hidden'), 6000);
+
 const music = document.getElementById('bgMusic');
+const startScreen = document.getElementById('startScreen');
 
-function startMusic() {
-  music.volume = 0.6;
-
-  music.play()
-    .then(() => {
-      console.log('Audio reproduciéndose');
-    })
-    .catch((error) => {
-      console.log('No se pudo reproducir todavía:', error);
-    });
-}
-
-window.addEventListener('load', startMusic);
-document.addEventListener('click', startMusic, { once: true });
-document.addEventListener('touchstart', startMusic, { once: true });
+startScreen.addEventListener('click', async () => {
+  try {
+    music.volume = 0.6;
+    await music.play();
+    startScreen.style.display = 'none';
+  } catch (error) {
+    console.log('No se pudo reproducir el audio:', error);
+  }
+});
 </script>
 </body>
 </html>
